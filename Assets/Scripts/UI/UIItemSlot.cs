@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UIItemSlot : MonoBehaviour
 {
-    public GameObjects Item = null;
+    public GameObjects Item = new();
     public TMP_Text amount;
     public Image img;
     // Start is called before the first frame update
@@ -18,23 +18,60 @@ public class UIItemSlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Item != null)
-            if (Item.amount > 0)
+        if (HasItem)
+        {
+            if (Item.amount <= 0)
             {
-                amount.enabled = true;
-                img.enabled = true;
-
-                amount.text = Item.amount.ToString();
-                img.sprite = Item.sprite;
+                Item = null;
+                return;
             }
 
-        if (Item == null)
+            amount.enabled = true;
+            img.enabled = true;
+
+            amount.text = Item.amount.ToString();
+            img.sprite = Item.sprite;
+        }
+        else
         {
             amount.enabled = false;
             img.enabled = false;
 
             amount.text = null;
             img.sprite = null;
+        }
+    }
+
+    public void InsetStack(UIItemSlot stack)
+    {
+        Item = stack.Item;
+    }
+
+    public void EmptyStack()
+    {
+        Item = null;
+    }
+
+    public void add(int amount, UIItemSlot stack)
+    {
+        Item.amount += amount;
+        stack.Item.amount -= amount;
+    }
+
+    public void TakeAll(UIItemSlot stack)
+    {
+        Item = stack.Item;
+        stack.EmptyStack();
+    }
+
+    public bool HasItem
+    {
+        get
+        {
+            if (Item == null)
+                return false;
+            else
+                return true;
         }
     }
 }
