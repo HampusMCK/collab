@@ -2418,9 +2418,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1246568074}
     m_Modifications:
+    - target: {fileID: 702495036233779621, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 33522eb2d18f8e741804bc24e9642954, type: 3}
+    - target: {fileID: 702495036233779621, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 887805388094717295, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 887805388094717295, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 33522eb2d18f8e741804bc24e9642954, type: 3}
+    - target: {fileID: 887805388094717295, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912144391713177341, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2920065218473271215, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
       propertyPath: m_Name
       value: CursorSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920065218473271215, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8294479181006292655, guid: 8fcbc149f07646c4aa8d535f6cf9c85f, type: 3}
       propertyPath: m_Pivot.x

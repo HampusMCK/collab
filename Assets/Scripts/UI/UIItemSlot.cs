@@ -18,6 +18,7 @@ public class UIItemSlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Debug.Log(HasItem + ", " + gameObject.name);
         if (HasItem)
         {
             if (Item.amount <= 0)
@@ -25,6 +26,7 @@ public class UIItemSlot : MonoBehaviour
                 Item = null;
                 return;
             }
+            // Debug.Log(HasItem + ", " + gameObject.name);
 
             amount.enabled = true;
             img.enabled = true;
@@ -68,7 +70,7 @@ public class UIItemSlot : MonoBehaviour
     {
         get
         {
-            if (Item == null)
+            if (Item == null || Item.amount <= 0)
                 return false;
             else
                 return true;

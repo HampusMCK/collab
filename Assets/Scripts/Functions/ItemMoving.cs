@@ -15,6 +15,7 @@ public class ItemMoving : MonoBehaviour
     private void Update()
     {
         cursorSlot.transform.position = Input.mousePosition;
+        cursorSlot.gameObject.GetComponent<Image>().enabled = cursorSlot.HasItem;
 
         if (Input.GetMouseButtonUp(0))
             HandleClick(CheckForSlot());
@@ -25,17 +26,17 @@ public class ItemMoving : MonoBehaviour
         pastClick = clickedSlot;
         if (clickedSlot == null)
             return;
-        
-        if (!cursorSlot.HasItem && !clickedSlot.HasItem)
+
+        else if (!cursorSlot.HasItem && !clickedSlot.HasItem)
             return;
 
-        if (!cursorSlot.HasItem && clickedSlot.HasItem)
+        else if (!cursorSlot.HasItem && clickedSlot.HasItem)
             cursorSlot.TakeAll(clickedSlot);
 
-        if (cursorSlot.HasItem && !clickedSlot.HasItem)
+        else if (cursorSlot.HasItem && !clickedSlot.HasItem)
             clickedSlot.TakeAll(cursorSlot);
 
-        if (cursorSlot.HasItem && clickedSlot.HasItem)
+        else if (cursorSlot.HasItem && clickedSlot.HasItem)
         {
             if (cursorSlot.Item.ID == clickedSlot.Item.ID)
             {
