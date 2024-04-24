@@ -10,6 +10,8 @@ public class WorldSC : MonoBehaviour
     [SerializeField]
     NavMeshSurface Surface;
 
+    public bool inUI;
+
     public void UpdateNavMesh()
     {
         Surface.BuildNavMesh();

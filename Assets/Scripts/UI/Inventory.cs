@@ -7,6 +7,7 @@ public class Inventory : MonoBehaviour
     PlayerController player;
     public GameObject ItemSlotPrefab;
     public List<UIItemSlot> slots;
+    public Inventory main;
     public int ID;
     public Chest owner;
 
@@ -20,10 +21,10 @@ public class Inventory : MonoBehaviour
             g.name = "Slot" + (i + 1);
             g.transform.SetParent(transform);
             UIItemSlot itemSlot = g.GetComponent<UIItemSlot>();
-            if (i == 3)
-                itemSlot.Item = player.Inventory[0];
             slots.Add(itemSlot);
         }
+
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame

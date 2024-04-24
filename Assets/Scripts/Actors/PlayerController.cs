@@ -5,8 +5,7 @@ using UnityEngine;
 [SelectionBase]
 public class PlayerController : MonoBehaviour
 {
-    HealthSystem health;
-    
+
     [Header("Movement")]
     public float speed;
     public float sprintSpeed;
@@ -15,17 +14,21 @@ public class PlayerController : MonoBehaviour
     [Header("UI Elements")]
     public GameObject CraftingUI;
     public GameObject InventoryUI;
+    public GameObject ChestUI;
+    public Inventory ChestInventory;
+    public Inventory inv;
 
     [Header("Inventory")]
     public List<GameObjects> Inventory;
 
-    bool crafting = false;
     [HideInInspector] public bool inInventory = false;
     bool hasReleasedKey = true;
 
     Transform cam;
 
     int InventoryLengthMemory;
+
+    HealthSystem health;
 
     Rigidbody rb;
 
@@ -35,12 +38,15 @@ public class PlayerController : MonoBehaviour
 
     Chest chest;
 
+    WorldSC world;
+
     // Start is called before the first frame update
     void Start()
     {
         cam = GameObject.Find("Main Camera").transform;
         rb = GetComponent<Rigidbody>();
         health = GetComponent<HealthSystem>();
+        world = GameObject.Find("World").GetComponent<WorldSC>();
     }
 
     private void FixedUpdate()
@@ -67,12 +73,10 @@ public class PlayerController : MonoBehaviour
         if (Inventory.Count != InventoryLengthMemory)
             UpdateInventory();
 
-        if (!crafting && !inInventory)
+        if (!world.inUI)
             getPlayerInput();
-        else if (crafting)
-            getPlayerCraftingInput();
-        else if (inInventory)
-            getPlayerInventoryInput();
+        else
+            getUIInputs();
 
         if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0)
             hasReleasedKey = true;
@@ -80,29 +84,26 @@ public class PlayerController : MonoBehaviour
         InventoryLengthMemory = Inventory.Count;
     }
 
-    private void getPlayerInventoryInput()
+    private void getUIInputs()
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        getInventory();
 
         if (Input.GetAxisRaw("Inventory") > 0 && hasReleasedKey)
         {
             hasReleasedKey = false;
-            InventoryUI.SetActive(false);
-            inInventory = false;
+            closeInventory();
+            world.inUI = false;
         }
-    }
-
-    private void getPlayerCraftingInput()
-    {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
 
         if (Input.GetAxisRaw("Action") > 0 && hasReleasedKey)
         {
             hasReleasedKey = false;
             CraftingUI.SetActive(false);
-            crafting = false;
+            closeInventory();
+            world.inUI = false;
         }
     }
 
@@ -138,20 +139,27 @@ public class PlayerController : MonoBehaviour
         {
             hasReleasedKey = false;
             CraftingUI.SetActive(true);
-            crafting = true;
+            InventoryUI.SetActive(true);
+            openInventory();
+            world.inUI = true;
         }
 
         if (Input.GetAxisRaw("Inventory") > 0 && hasReleasedKey) // Open Inventory UI
         {
             hasReleasedKey = false;
             InventoryUI.SetActive(true);
-            inInventory = true;
+            openInventory();
+            world.inUI = true;
         }
 
         if (Input.GetMouseButtonUp(1))
         {
             if (chest != null) //If Right MouseButton pressed while looking at a Chest
             {
+                ChestUI.SetActive(true);
+                InventoryUI.SetActive(true);
+                openInventory();
+                world.inUI = true;
                 chest.OpenChest(this);
             }
         }
@@ -180,5 +188,38 @@ public class PlayerController : MonoBehaviour
         }
 
         Inventory.RemoveAll(item => item.amount <= 0);
+    }
+
+    private void getInventory()
+    {
+        Inventory.Clear();
+        foreach (UIItemSlot slot in inv.slots)
+        {
+            if (slot.HasItem)
+            {
+                Inventory.Add(slot.Item);
+            }
+        }
+    }
+
+    private void openInventory()
+    {
+        for (int i = 0; i < Inventory.Count; i++)
+        {
+            if (!inv.slots[i].HasItem)
+                inv.slots[i].Item = Inventory[i];
+        }
+    }
+
+    public void closeInventory()
+    {
+        foreach (UIItemSlot slot in inv.slots)
+        {
+            if (slot.HasItem)
+            {
+                slot.Item = null;
+            }
+        }
+        InventoryUI.SetActive(false);
     }
 }

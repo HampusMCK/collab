@@ -5,12 +5,17 @@ using UnityEngine;
 public class Chest : MonoBehaviour
 {
     public List<GameObjects> Inventory;
-    public GameObject invUI;
+    public Inventory inv;
     bool open;
+    public WorldSC world;
+
+    private void Start()
+    {
+        world = GameObject.Find("World").GetComponent<WorldSC>();
+    }
 
     private void Update()
     {
-        invUI.SetActive(open);
         if (open)
             Open();
     }
@@ -45,13 +50,43 @@ public class Chest : MonoBehaviour
         UpdateInventory();
         PlayerController player = GameObject.Find("Player").GetComponent<PlayerController>();
 
+        Inventory.Clear();
+        foreach(UIItemSlot slot in inv.slots)
+        {
+            if (slot.HasItem)
+            {
+                Inventory.Add(slot.Item);
+            }
+        }
+
         if (Input.GetAxisRaw("Inventory") > 0)
-            open = false;
+        {
+            Close(player);
+        }
     }
 
     public void OpenChest(PlayerController player)
     {
         open = true;
         player.inInventory = true;
+        inv = player.ChestInventory;
+        for (int i = 0; i < Inventory.Count; i++)
+        {
+            inv.slots[i].Item = Inventory[i];
+        }
+    }
+
+    public void Close(PlayerController player)
+    {
+        open = false;
+        foreach(UIItemSlot slot in inv.slots)
+        {
+            if (slot.HasItem)
+            {
+                slot.Item = null;
+            }
+        }
+        inv = null;
+        player.ChestUI.SetActive(false);
     }
 }
