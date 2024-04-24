@@ -5,18 +5,30 @@ using UnityEngine;
 
 public class CraftingHandler : MonoBehaviour
 {
-    public void craft(List<GameObjects> inv, GameObjects ItemToCraft)
+    PlayerController player;
+    WorldSC world;
+
+    private void Start()
     {
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        world = GameObject.Find("World").GetComponent<WorldSC>();
+    }
+
+    public void craft(int ID)
+    {
+        GameObjects ItemToCraft = world.ItemsInGame[ID];
+        if (!ItemToCraft.Craftable)
+            return;
         int recepieLength = ItemToCraft.recepie.Count;
         int obtainedMaterials = 0;
         bool canCraft = false;
-        foreach (Recepie ID in ItemToCraft.recepie)
+        foreach (Recepie recepie in ItemToCraft.recepie)
         {
-            foreach (GameObjects g in inv)
+            foreach (GameObjects g in player.Inventory)
             {
-                if (g.ID == ID.ID)
+                if (g.ID == recepie.ID)
                 {
-                    if (g.amount >= ID.amount)
+                    if (g.amount >= recepie.amount)
                     {
                         if (obtainedMaterials < recepieLength)
                             obtainedMaterials++;
@@ -31,40 +43,33 @@ public class CraftingHandler : MonoBehaviour
         if (!canCraft)
             return;
 
-        foreach (Recepie ID in ItemToCraft.recepie)
+        foreach (Recepie recepie in ItemToCraft.recepie)
         {
-            foreach (GameObjects g in inv)
+            foreach (GameObjects g in player.Inventory)
             {
-                if (g.ID == ID.ID)
+                if (g.ID == recepie.ID)
                 {
-                    g.amount -= ID.amount;
+                    g.amount -= recepie.amount;
                 }
             }
         }
 
         GameObjects craftedItem = new GameObjects()
         {
-            amount = ItemToCraft.amount,
-            amountWhenCrafted = ItemToCraft.amountWhenCrafted,
-            Name = ItemToCraft.Name,
             ID = ItemToCraft.ID,
-            StackAmount = ItemToCraft.StackAmount,
+            Name = ItemToCraft.Name,
+            amount = ItemToCraft.amount,
+            prefab = ItemToCraft.prefab,
             sprite = ItemToCraft.sprite,
             recepie = ItemToCraft.recepie,
-            Craftable = ItemToCraft.Craftable
+            Craftable = ItemToCraft.Craftable,
+            buildingID = ItemToCraft.buildingID,
+            isPlaceable = ItemToCraft.isPlaceable,
+            StackAmount = ItemToCraft.StackAmount,
+            amountWhenCrafted = ItemToCraft.amountWhenCrafted
         };
         craftedItem.amount = ItemToCraft.amountWhenCrafted;
 
-        inv.Add(craftedItem);
-    }
-
-    public void initiateCraft(int ID)
-    {
-        PlayerController player = GameObject.Find("Player").GetComponent<PlayerController>();
-        WorldSC world = GameObject.Find("World").GetComponent<WorldSC>();
-        List<GameObjects> inv = player.Inventory;
-        GameObjects itc = world.ItemsInGame[ID];
-        if (itc.Craftable)
-            craft(inv, itc);
+        player.AddCraftedItem(craftedItem);
     }
 }

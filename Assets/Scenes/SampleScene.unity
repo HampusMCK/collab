@@ -956,7 +956,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2050748267}
         m_TargetAssemblyTypeName: CraftingHandler, Assembly-CSharp
-        m_MethodName: initiateCraft
+        m_MethodName: craft
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3504,49 +3504,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5745559475495251, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: invUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 14623593464666462, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
       propertyPath: m_Name
       value: Chest
-      objectReference: {fileID: 0}
-    - target: {fileID: 3426432438142400302, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3529762447035023457, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3529762447035023457, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3529762447035023457, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 3529762447035023457, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625794370828036027, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625794370828036027, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625794370828036027, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625794370828036027, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -400
       objectReference: {fileID: 0}
     - target: {fileID: 6788435603877035372, guid: 99771ad1bcb58ed4b9ab697a4b44d91c, type: 3}
       propertyPath: m_LocalPosition.x

@@ -43,6 +43,11 @@ public class GameObjects
     public bool Craftable;
     public List<Recepie> recepie;
     public int amountWhenCrafted;
+
+    [Header("Building Data")]
+    public bool isPlaceable;
+    public GameObject prefab;
+    public byte buildingID;
 }
 
 [System.Serializable]

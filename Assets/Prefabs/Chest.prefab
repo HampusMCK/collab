@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Inventory: []
-  invUI: {fileID: 0}
+  inv: {fileID: 0}
+  world: {fileID: 0}
 --- !u!65 &8272325759569180945
 BoxCollider:
   m_ObjectHideFlags: 0

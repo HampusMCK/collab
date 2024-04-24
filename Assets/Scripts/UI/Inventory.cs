@@ -30,21 +30,5 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if (ID == 0)
-        //     for (int i = 0; i < slots.Count; i++)
-        //     {
-        //         if (player.Inventory.Count > i)
-        //             slots[i].Item = player.Inventory[i];
-        //         else
-        //             slots[i].Item = null;
-        //     }
-        // else
-        //     for (int i = 0; i < slots.Count; i++)
-        //     {
-        //         if (owner.Inventory.Count > i)
-        //             slots[i].Item = owner.Inventory[i];
-        //         else
-        //             slots[i].Item = null;
-        //     }
     }
 }

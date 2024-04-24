@@ -18,31 +18,79 @@ public class ItemMoving : MonoBehaviour
         cursorSlot.gameObject.GetComponent<Image>().enabled = cursorSlot.HasItem;
 
         if (Input.GetMouseButtonUp(0))
-            HandleClick(CheckForSlot());
+            HandleClick(CheckForSlot(), 0);
+        if (Input.GetMouseButtonUp(1))
+            HandleClick(CheckForSlot(), 1);
     }
 
-    public void HandleClick(UIItemSlot clickedSlot)
+    public void HandleClick(UIItemSlot clickedSlot, int mbClicked)
     {
-        pastClick = clickedSlot;
-        if (clickedSlot == null)
-            return;
-
-        else if (!cursorSlot.HasItem && !clickedSlot.HasItem)
-            return;
-
-        else if (!cursorSlot.HasItem && clickedSlot.HasItem)
-            cursorSlot.TakeAll(clickedSlot);
-
-        else if (cursorSlot.HasItem && !clickedSlot.HasItem)
-            clickedSlot.TakeAll(cursorSlot);
-
-        else if (cursorSlot.HasItem && clickedSlot.HasItem)
+        if (mbClicked == 0)
         {
-            if (cursorSlot.Item.ID == clickedSlot.Item.ID)
+            if (clickedSlot == null)
+                return;
+
+            else if (!cursorSlot.HasItem && !clickedSlot.HasItem)
+                return;
+
+            else if (!cursorSlot.HasItem && clickedSlot.HasItem)
+                cursorSlot.TakeAll(clickedSlot);
+
+            else if (cursorSlot.HasItem && !clickedSlot.HasItem)
+                clickedSlot.TakeAll(cursorSlot);
+
+            else if (cursorSlot.HasItem && clickedSlot.HasItem)
             {
-                clickedSlot.add(99 - clickedSlot.Item.amount, cursorSlot);
+                if (cursorSlot.Item.ID == clickedSlot.Item.ID)
+                {
+                    if (cursorSlot.Item.amount + clickedSlot.Item.amount <= 99)
+                        clickedSlot.add(cursorSlot.Item.amount, cursorSlot);
+                    else
+                    {
+                        clickedSlot.add(99 - clickedSlot.Item.amount, cursorSlot);
+                    }
+                }
+                else
+                    cursorSlot.SwitchStack(clickedSlot);
             }
         }
+        else if (mbClicked == 1)
+        {
+            if (clickedSlot == null)
+                return;
+
+            else if (!cursorSlot.HasItem && !clickedSlot.HasItem)
+                return;
+
+            else if (!cursorSlot.HasItem && clickedSlot.HasItem)
+                cursorSlot.TakeHalf(clickedSlot);
+
+            else if (cursorSlot.HasItem && !clickedSlot.HasItem)
+                clickedSlot.TakeHalf(cursorSlot);
+
+            else if (cursorSlot.HasItem && clickedSlot.HasItem)
+            {
+                if (cursorSlot.Item.ID == clickedSlot.Item.ID)
+                {
+                    if (clickedSlot.Item.amount + (cursorSlot.Item.amount / 2) <= 99)
+                        clickedSlot.add(cursorSlot.Item.amount / 2, cursorSlot);
+                    else
+                    {
+                        int amt = 99 - clickedSlot.Item.amount;
+                        clickedSlot.add(amt, cursorSlot);
+                    }
+                }
+                else
+                    cursorSlot.SwitchStack(clickedSlot);
+            }
+        }
+        if (clickedSlot.HasItem)
+        {
+            if (clickedSlot.Item.amount < 99)
+                pastClick = clickedSlot;
+        }
+        else
+            pastClick = clickedSlot;
     }
 
     private UIItemSlot CheckForSlot()
@@ -59,5 +107,16 @@ public class ItemMoving : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ReturnStack()
+    {
+        if (pastClick == null || !cursorSlot.HasItem)
+            return;
+
+        if (pastClick.HasItem && pastClick.Item.ID == cursorSlot.Item.ID)
+            pastClick.add(cursorSlot.Item.amount, cursorSlot);
+        else
+            pastClick.TakeAll(cursorSlot);
     }
 }

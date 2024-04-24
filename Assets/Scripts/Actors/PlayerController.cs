@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [SelectionBase]
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool inInventory = false;
     bool hasReleasedKey = true;
+    bool crafting = false;
 
     Transform cam;
 
@@ -70,9 +72,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Inventory.Count != InventoryLengthMemory)
-            UpdateInventory();
-
         if (!world.inUI)
             getPlayerInput();
         else
@@ -81,6 +80,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0)
             hasReleasedKey = true;
 
+        if (Inventory.Count != InventoryLengthMemory)
+            UpdateInventory();
         InventoryLengthMemory = Inventory.Count;
     }
 
@@ -91,14 +92,14 @@ public class PlayerController : MonoBehaviour
 
         getInventory();
 
-        if (Input.GetAxisRaw("Inventory") > 0 && hasReleasedKey)
+        if (Input.GetAxisRaw("Inventory") > 0 && hasReleasedKey && !CraftingUI.activeSelf)
         {
             hasReleasedKey = false;
             closeInventory();
             world.inUI = false;
         }
 
-        if (Input.GetAxisRaw("Action") > 0 && hasReleasedKey)
+        if (Input.GetAxisRaw("Action") > 0 && hasReleasedKey && CraftingUI.activeSelf)
         {
             hasReleasedKey = false;
             CraftingUI.SetActive(false);
@@ -170,6 +171,7 @@ public class PlayerController : MonoBehaviour
         for (int x = 0; x < Inventory.Count; x++)
         {
             if (Inventory[x].amount > 0 && Inventory[x].amount < 99)
+            {
                 for (int i = x + 1; i < Inventory.Count; i++)
                 {
                     if (Inventory[x].ID == Inventory[i].ID && Inventory[i].amount > 0)
@@ -185,19 +187,22 @@ public class PlayerController : MonoBehaviour
                         Inventory[i].amount = 0;
                     }
                 }
+            }
         }
-
         Inventory.RemoveAll(item => item.amount <= 0);
     }
 
     private void getInventory()
     {
-        Inventory.Clear();
-        foreach (UIItemSlot slot in inv.slots)
+        if (!crafting)
         {
-            if (slot.HasItem)
+            Inventory.Clear();
+            foreach (UIItemSlot slot in inv.slots)
             {
-                Inventory.Add(slot.Item);
+                if (slot.HasItem)
+                {
+                    Inventory.Add(slot.Item);
+                }
             }
         }
     }
@@ -213,6 +218,12 @@ public class PlayerController : MonoBehaviour
 
     public void closeInventory()
     {
+        ItemMoving im = GameObject.Find("UI").GetComponent<ItemMoving>();
+        if (im.cursorSlot.HasItem)
+        {
+            im.ReturnStack();
+            getInventory();
+        }
         foreach (UIItemSlot slot in inv.slots)
         {
             if (slot.HasItem)
@@ -221,5 +232,20 @@ public class PlayerController : MonoBehaviour
             }
         }
         InventoryUI.SetActive(false);
+    }
+
+    public void AddCraftedItem(GameObjects _item)
+    {
+        crafting = true;
+        Inventory.Add(_item);
+        foreach (UIItemSlot slot in inv.slots)
+        {
+            if (!slot.HasItem)
+            {
+                slot.Item = _item;
+                break;
+            }
+        }
+        crafting = false;
     }
 }

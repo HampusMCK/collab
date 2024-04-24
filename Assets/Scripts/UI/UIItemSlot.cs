@@ -44,11 +44,6 @@ public class UIItemSlot : MonoBehaviour
         }
     }
 
-    public void InsetStack(UIItemSlot stack)
-    {
-        Item = stack.Item;
-    }
-
     public void EmptyStack()
     {
         Item = null;
@@ -60,10 +55,50 @@ public class UIItemSlot : MonoBehaviour
         stack.Item.amount -= amount;
     }
 
+    public void TakeHalf(UIItemSlot stack)
+    {
+        int _amt;
+        if (stack.Item.amount % 2 != 0)
+        {
+            _amt = stack.Item.amount / 2;
+            stack.Item.amount = (stack.Item.amount + 1) / 2;
+        }
+        else
+        {
+            _amt = stack.Item.amount / 2;
+            stack.Item.amount = _amt;
+        }
+
+        GameObjects item = new()
+        {
+            amount = _amt,
+            ID = stack.Item.ID,
+            Name = stack.Item.Name,
+            sprite = stack.Item.sprite,
+            prefab = stack.Item.prefab,
+            recepie = stack.Item.recepie,
+            Craftable = stack.Item.Craftable,
+            buildingID = stack.Item.buildingID,
+            StackAmount = stack.Item.StackAmount,
+            isPlaceable = stack.Item.isPlaceable,
+            amountWhenCrafted = stack.Item.amountWhenCrafted
+        };
+        Item = item;
+    }
+
     public void TakeAll(UIItemSlot stack)
     {
         Item = stack.Item;
         stack.EmptyStack();
+    }
+
+    public void SwitchStack(UIItemSlot stack)
+    {
+        GameObjects itemToGive = stack.Item;
+        stack.EmptyStack();
+        stack.Item = Item;
+        EmptyStack();
+        Item = itemToGive;
     }
 
     public bool HasItem
