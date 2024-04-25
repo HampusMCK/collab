@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 [SelectionBase]
 public class PlayerController : MonoBehaviour
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public GameObject ChestUI;
     public Inventory ChestInventory;
     public Inventory inv;
+    public Slider healthBar;
+    public Image healthbarFill;
+    public Gradient healthGradient;
 
     [Header("Inventory")]
     public List<GameObjects> Inventory;
@@ -42,13 +46,14 @@ public class PlayerController : MonoBehaviour
 
     WorldSC world;
 
-    // Start is called before the first frame update
     void Start()
     {
         cam = GameObject.Find("Main Camera").transform;
         rb = GetComponent<Rigidbody>();
         health = GetComponent<HealthSystem>();
         world = GameObject.Find("World").GetComponent<WorldSC>();
+        healthBar.maxValue = health.maxHP;
+        updateHealthBar();
     }
 
     private void FixedUpdate()
@@ -69,7 +74,7 @@ public class PlayerController : MonoBehaviour
             chest = null;
         }
     }
-    // Update is called once per frame
+
     void Update()
     {
         if (!world.inUI)
@@ -77,7 +82,7 @@ public class PlayerController : MonoBehaviour
         else
             getUIInputs();
 
-        if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0)
+        if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0 && Input.GetAxisRaw("Jump") == 0)
             hasReleasedKey = true;
 
         if (Inventory.Count != InventoryLengthMemory)
@@ -164,6 +169,12 @@ public class PlayerController : MonoBehaviour
                 chest.OpenChest(this);
             }
         }
+
+        if (Input.GetAxisRaw("Jump") > 0 && hasReleasedKey)
+        {
+            hasReleasedKey = false;
+            damage(10);
+        }
     }
 
     private void UpdateInventory()
@@ -247,5 +258,28 @@ public class PlayerController : MonoBehaviour
             }
         }
         crafting = false;
+    }
+
+    public void updateHealthBar()
+    {
+        healthBar.value = health.GetHealth();
+        healthbarFill.color = hpColor(health.GetHealth() / health.maxHP);
+    }
+
+    Color hpColor(float value)
+    {
+        return healthGradient.Evaluate(value);
+    }
+
+    public void damage(int value)
+    {
+        health.ApplyDamage(value);
+        updateHealthBar();
+    }
+
+    public void Heal(int value)
+    {
+        health.ApplyDamage(-value);
+        updateHealthBar();
     }
 }

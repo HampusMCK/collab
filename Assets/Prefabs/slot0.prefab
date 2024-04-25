@@ -233,6 +233,9 @@ MonoBehaviour:
     Craftable: 0
     recepie: []
     amountWhenCrafted: 0
+    isPlaceable: 0
+    prefab: {fileID: 0}
+    buildingID: 0
   amount: {fileID: 4528504019062370034}
   img: {fileID: 887805388094717295}
 --- !u!1 &4347321550599230052

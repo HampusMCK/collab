@@ -1,16 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
 {
-    public int maxHP;
-    int _hP;
+    public float maxHP;
+    float _hP;
+
+    private void Awake()
+    {
+        _hP = maxHP;
+    }
 
     public void ApplyDamage(int dmg)
     {
         _hP -= dmg;
     }
 
-    public int GetHealth()
+    public float GetHealth()
     {
         return _hP;
     }

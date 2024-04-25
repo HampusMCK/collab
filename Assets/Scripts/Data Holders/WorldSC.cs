@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.UIElements;
 using System.IO;
 
 public class WorldSC : MonoBehaviour
@@ -11,14 +10,14 @@ public class WorldSC : MonoBehaviour
     NavMeshSurface Surface;
 
     public bool inUI;
+    public List<GameObjects> ItemsInGame;
+    public Settings settings;
 
     public void UpdateNavMesh()
     {
         Surface.BuildNavMesh();
     }
 
-    public List<GameObjects> ItemsInGame;
-    public Settings settings;
 
     private void Awake()
     {
