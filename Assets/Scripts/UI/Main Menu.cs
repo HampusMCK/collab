@@ -13,6 +13,11 @@ public class MainMenu : MonoBehaviour
     public GameObject mainUI;
     public GameObject SettingsUI;
 
+    [Header("Loading Screen References")]
+    public GameObject loadingScreen;
+    public Image loadingFill;
+    public TMP_Text loadingStatus;
+
     public Settings settings;
 
     private void Awake()
@@ -70,9 +75,25 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void Play()
+    public void Play(int SceneID)
     {
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        StartCoroutine(LoadSceneAsync(SceneID));
+    }
+
+    IEnumerator LoadSceneAsync(int SceneID)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(SceneID);
+
+        loadingScreen.SetActive(true);
+
+        while (!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+            loadingFill.fillAmount = progressValue;
+            loadingStatus.text = (progressValue * 100).ToString() + "%";
+
+            yield return null;
+        }
     }
 
     public void UpdateMouseSlider()
