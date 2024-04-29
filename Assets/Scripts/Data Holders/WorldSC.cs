@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class WorldSC : MonoBehaviour
 {
@@ -24,6 +25,17 @@ public class WorldSC : MonoBehaviour
         settings = JsonUtility.FromJson<Settings>(jsonImport);
         PlayerController p = GameObject.Find("Player").GetComponent<PlayerController>();
         p.mouseSensetivity = settings.mouseSensetivity;
+    }
+
+    private void Update() {
+        if (Input.GetKeyUp(KeyCode.L))
+            loadMission();
+    }
+
+    public void loadMission()
+    {
+        DontDestroyOnLoad(this);
+        SceneManager.LoadScene(2);
     }
 }
 

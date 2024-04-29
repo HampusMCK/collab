@@ -6,7 +6,8 @@ TagManager:
   tags:
   - Chest
   - UIItemSlot
-  - 0
+  - Pickupable
+  - BreakableItem
   layers:
   - Default
   - TransparentFX

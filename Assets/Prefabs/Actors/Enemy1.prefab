@@ -154,6 +154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11abf83848138a942b035545ffbee32a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sightRange: 30
+  sightAngle: 100
+  hearingRange: 20
+  smellRange: 20
 --- !u!114 &2086794637319082888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +165,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8135089393686393531}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc8fdb3960d12104ba97544f6ba00d6a, type: 3}
   m_Name: 

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float sprintSpeed;
     public float mouseSensetivity;
+    public float jumpForce;
 
     [Header("UI Elements")]
     public GameObject CraftingUI;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public Slider healthBar;
     public Image healthbarFill;
     public Gradient healthGradient;
+    public hotbar hotbar;
 
     [Header("Inventory")]
     public List<GameObjects> Inventory;
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
     Transform cam;
 
     int InventoryLengthMemory;
+    int hotbarSlot;
 
     HealthSystem health;
 
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour
     Collider other = null;
 
     Chest chest;
+    Item itemLookingAt;
+    BreakableItem breakableItem;
 
     WorldSC world;
 
@@ -54,6 +59,7 @@ public class PlayerController : MonoBehaviour
         world = GameObject.Find("World").GetComponent<WorldSC>();
         healthBar.maxValue = health.maxHP;
         updateHealthBar();
+        DontDestroyOnLoad(this);
     }
 
     private void FixedUpdate()
@@ -68,10 +74,22 @@ public class PlayerController : MonoBehaviour
         {
             if (other.gameObject.tag == "Chest")
                 chest = other.gameObject.GetComponent<Chest>();
+
+            if (other.gameObject.tag == "Pickupable")
+            {
+                itemLookingAt = other.gameObject.GetComponent<Item>();
+            }
+
+            if (other.gameObject.tag == "BreakableItem")
+            {
+                breakableItem = other.gameObject.GetComponent<BreakableItem>();
+            }
         }
         else
         {
             chest = null;
+            itemLookingAt = null;
+            breakableItem = null;
         }
     }
 
@@ -131,8 +149,11 @@ public class PlayerController : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
 
-        Vector3 movement = new Vector3(moveX, 0, moveZ) * Time.deltaTime * speed;
-        transform.Translate(movement);
+        Vector3 movement = new Vector3(moveX, 0, moveZ) * Time.deltaTime;
+        if (Input.GetAxisRaw("Sprint") > 0)
+            transform.Translate(movement * sprintSpeed);
+        else
+            transform.Translate(movement * speed);
 
         //Camera movement
         float mouseHorizontal = Input.GetAxisRaw("Mouse X") * mouseSensetivity;
@@ -170,10 +191,58 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetAxisRaw("Jump") > 0 && hasReleasedKey)
+        if (Input.GetMouseButtonUp(0))
         {
-            hasReleasedKey = false;
-            damage(10);
+            if (itemLookingAt != null)
+            {
+                pickupItem(itemLookingAt.ID);
+            }
+
+            if (breakableItem != null)
+            {
+                print("Punching");
+                breakableItem.punch((int)Random.Range(10, 15));
+            }
+        }
+
+        if (Input.GetAxisRaw("Mouse ScrollWheel") != 0)
+        {
+            if (Input.GetAxisRaw("Mouse ScrollWheel") > 0)
+            {
+                hotbarSlot--;
+            }
+            else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0)
+            {
+                hotbarSlot++;
+            }
+
+            if (hotbarSlot < 0)
+                hotbarSlot = 8;
+            if (hotbarSlot > 8)
+                hotbarSlot = 0;
+
+            hotbar.setHighlighted(hotbarSlot);
+        }
+
+        if (Input.GetAxisRaw("Jump") > 0 && hasReleasedKey && canJump)
+        {
+            Jump();
+        }
+    }
+
+    void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+    }
+
+    bool canJump
+    {
+        get
+        {
+            if (rb.velocity.y == 0)
+                return true;
+            else
+                return false;
         }
     }
 
@@ -286,5 +355,27 @@ public class PlayerController : MonoBehaviour
     public void MakeSound(int magnitude)
     {
         //quack
+    }
+
+    public void pickupItem(byte ID)
+    {
+        GameObjects ItemToPickup = new()
+        {
+            amount = 1,
+            ID = world.ItemsInGame[ID].ID,
+            Name = world.ItemsInGame[ID].Name,
+            prefab = world.ItemsInGame[ID].prefab,
+            sprite = world.ItemsInGame[ID].sprite,
+            recepie = world.ItemsInGame[ID].recepie,
+            Craftable = world.ItemsInGame[ID].Craftable,
+            buildingID = world.ItemsInGame[ID].buildingID,
+            StackAmount = world.ItemsInGame[ID].StackAmount,
+            isPlaceable = world.ItemsInGame[ID].isPlaceable,
+            amountWhenCrafted = world.ItemsInGame[ID].amountWhenCrafted
+        };
+
+        Inventory.Add(ItemToPickup);
+
+        itemLookingAt.pickup();
     }
 }

@@ -16,6 +16,7 @@ public class ItemMoving : MonoBehaviour
 
     private void Start()
     {
+        DontDestroyOnLoad(this);
         world = GameObject.Find("World").GetComponent<WorldSC>();
     }
 
