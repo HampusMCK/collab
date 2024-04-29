@@ -282,4 +282,9 @@ public class PlayerController : MonoBehaviour
         health.ApplyDamage(-value);
         updateHealthBar();
     }
+
+    public void MakeSound(int magnitude)
+    {
+        //quack
+    }
 }

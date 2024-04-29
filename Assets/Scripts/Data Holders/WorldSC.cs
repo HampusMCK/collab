@@ -6,8 +6,7 @@ using System.IO;
 
 public class WorldSC : MonoBehaviour
 {
-    [SerializeField]
-    NavMeshSurface Surface;
+    public NavMeshSurface Surface;
 
     public bool inUI;
     public List<GameObjects> ItemsInGame;

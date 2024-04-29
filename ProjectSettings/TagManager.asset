@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Chest
   - UIItemSlot
+  - 0
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - Water
   - UI
   - Character
-  - 
-  - 
+  - Wall
+  - Pickupable
   - 
   - 
   - 

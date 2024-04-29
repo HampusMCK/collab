@@ -12,8 +12,18 @@ public class ItemMoving : MonoBehaviour
     public PointerEventData ped;
     public EventSystem es;
 
+    WorldSC world;
+
+    private void Start()
+    {
+        world = GameObject.Find("World").GetComponent<WorldSC>();
+    }
+
     private void Update()
     {
+        if (!world.inUI)
+            return;
+
         cursorSlot.transform.position = Input.mousePosition;
         cursorSlot.gameObject.GetComponent<Image>().enabled = cursorSlot.HasItem;
 

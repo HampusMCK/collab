@@ -9,6 +9,8 @@ public class EnemyController : MonoBehaviour
 
     HealthSystem health;
 
+    WorldSC world;
+
     [Header("Sensing")]
     public float sightRange;
     public float sightAngle;
@@ -19,11 +21,12 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         health = GetComponent<HealthSystem>();
+        world = GameObject.Find("World").GetComponent<WorldSC>();
     }
 
     void Update()
     {
-
+        
 
 
         
@@ -32,14 +35,20 @@ public class EnemyController : MonoBehaviour
 
         // Physics.Raycast(transform.position + Vector3.up, DirFromAngle(20), out RaycastHit hit2, sightRange, Physics.DefaultRaycastLayers);
         // Debug.DrawRay(transform.position + Vector3.up, DirFromAngle(20) * sightRange, Color.green);
-
-        // Physics.Raycast(transform.position + Vector3.up, DirFromAngle(-20), out RaycastHit hit3, sightRange, Physics.DefaultRaycastLayers);
-        // Debug.DrawRay(transform.position + Vector3.up, DirFromAngle(-20) * sightRange, Color.green);
     }
 
     public Vector3 DirFromAngle(float angle)
     {
         angle += transform.eulerAngles.y;
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+    }
+
+    Collider[] GetObjectsInHearing()
+    {
+        string[] layers = {LayerMask.LayerToName(6)};
+        LayerMask mask = LayerMask.GetMask(layers);
+        Collider[] colidInHear = Physics.OverlapSphere(transform.position, hearingRange, mask);
+
+        return colidInHear;
     }
 }
