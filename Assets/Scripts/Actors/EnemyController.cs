@@ -19,6 +19,11 @@ public class EnemyController : MonoBehaviour
 
     void Awake()
     {
+
+    }
+
+    private void Start()
+    {
         agent = GetComponent<NavMeshAgent>();
         health = GetComponent<HealthSystem>();
         world = GameObject.Find("World").GetComponent<WorldSC>();
@@ -26,10 +31,10 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        
 
 
-        
+
+
         // Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit1, sightRange, Physics.DefaultRaycastLayers);
         // Debug.DrawRay(transform.position + Vector3.up, transform.forward * sightRange, Color.green);
 
@@ -45,7 +50,7 @@ public class EnemyController : MonoBehaviour
 
     Collider[] GetObjectsInHearing()
     {
-        string[] layers = {LayerMask.LayerToName(6)};
+        string[] layers = { LayerMask.LayerToName(6) };
         LayerMask mask = LayerMask.GetMask(layers);
         Collider[] colidInHear = Physics.OverlapSphere(transform.position, hearingRange, mask);
 

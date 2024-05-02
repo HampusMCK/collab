@@ -4,17 +4,12 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    PlayerController player;
     public GameObject ItemSlotPrefab;
     public List<UIItemSlot> slots;
-    public Inventory main;
-    public int ID;
-    public Chest owner;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
         for (int i = 0; i < 49; i++)
         {
             GameObject g = Instantiate(ItemSlotPrefab);

@@ -8,6 +8,7 @@ TagManager:
   - UIItemSlot
   - Pickupable
   - BreakableItem
+  - Button
   layers:
   - Default
   - TransparentFX

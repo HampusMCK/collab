@@ -1,0 +1,52 @@
+[
+  {
+    "MountId": "56e62dd7-241f-41e9-8c6b-dd4ca4513e62",
+    "AncestorCsetIds": [
+      65
+    ],
+    "SourceCsetId": 67,
+    "DestinationCsetId": 65,
+    "FileConflicts": [
+      {
+        "Path": "/Assets/Prefabs/Actors/Player.prefab",
+        "ItemId": 4491,
+        "ParentItemId": 4472,
+        "BaseRevId": 4428,
+        "SourceRevId": 4526,
+        "DestinationRevId": 4428
+      },
+      {
+        "Path": "/Assets/Scenes/SampleScene.unity",
+        "ItemId": 185,
+        "ParentItemId": 182,
+        "BaseRevId": 4447,
+        "SourceRevId": 4509,
+        "DestinationRevId": 4447
+      },
+      {
+        "Path": "/Assets/Scenes/Mission1.unity",
+        "ItemId": 4481,
+        "ParentItemId": 182,
+        "BaseRevId": 4445,
+        "SourceRevId": 4527,
+        "DestinationRevId": 4445
+      },
+      {
+        "Path": "/Assets/Scripts/Actors/EnemyController.cs",
+        "ItemId": 791,
+        "ParentItemId": 775,
+        "BaseRevId": 2390,
+        "SourceRevId": 4530,
+        "DestinationRevId": 2390
+      },
+      {
+        "Path": "/Assets/Scripts/Data Holders/WorldSC.cs",
+        "ItemId": 315,
+        "ParentItemId": 778,
+        "BaseRevId": 2392,
+        "SourceRevId": 4515,
+        "DestinationRevId": 2392
+      }
+    ]
+  }
+]

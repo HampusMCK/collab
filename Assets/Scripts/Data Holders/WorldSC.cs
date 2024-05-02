@@ -26,17 +26,6 @@ public class WorldSC : MonoBehaviour
         PlayerController p = GameObject.Find("Player").GetComponent<PlayerController>();
         p.mouseSensetivity = settings.mouseSensetivity;
     }
-
-    private void Update() {
-        if (Input.GetKeyUp(KeyCode.L))
-            loadMission();
-    }
-
-    public void loadMission()
-    {
-        DontDestroyOnLoad(this);
-        SceneManager.LoadScene(2);
-    }
 }
 
 [System.Serializable]

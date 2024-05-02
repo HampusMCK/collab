@@ -59,7 +59,6 @@ public class PlayerController : MonoBehaviour
         world = GameObject.Find("World").GetComponent<WorldSC>();
         healthBar.maxValue = health.maxHP;
         updateHealthBar();
-        DontDestroyOnLoad(this);
     }
 
     private void FixedUpdate()
@@ -83,6 +82,15 @@ public class PlayerController : MonoBehaviour
             if (other.gameObject.tag == "BreakableItem")
             {
                 breakableItem = other.gameObject.GetComponent<BreakableItem>();
+            }
+
+            if (other.gameObject.tag == "Button")
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    Button b = other.gameObject.GetComponent<Button>();
+                    b.onClick.Invoke();
+                }
             }
         }
         else
