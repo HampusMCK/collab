@@ -13,6 +13,9 @@ public class WorldSC : MonoBehaviour
     public List<GameObjects> ItemsInGame;
     public Settings settings;
 
+    private Vector3 _wind = Vector3.forward;
+    public Vector3 wind { get => _wind; set => _wind = value; }
+
     public void UpdateNavMesh()
     {
         Surface.BuildNavMesh();
@@ -25,6 +28,9 @@ public class WorldSC : MonoBehaviour
         settings = JsonUtility.FromJson<Settings>(jsonImport);
         PlayerController p = GameObject.Find("Player").GetComponent<PlayerController>();
         p.mouseSensetivity = settings.mouseSensetivity;
+
+        wind = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+        // UpdateNavMesh();
     }
 }
 

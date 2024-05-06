@@ -20,6 +20,8 @@ public class SceneHandler : MonoBehaviour
             DontDestroyOnLoad(g);
         }
         DontDestroyOnLoad(this);
+
+        loadNextScene(2);
     }
 
     private void Update()
@@ -34,9 +36,9 @@ public class SceneHandler : MonoBehaviour
 
     public void loadNextScene(int SceneToLoad)
     {
-        if (SceneToLoad == 2)
+        if (SceneToLoad == 3)
             spawn = new Vector3(8, 2, 8);
-        if (SceneToLoad == 1)
+        if (SceneToLoad == 2)
             spawn = new Vector3(0, 2, 0);
         StartCoroutine(LoadScene(SceneToLoad));
     }

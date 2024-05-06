@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public Image healthbarFill;
     public Gradient healthGradient;
     public hotbar hotbar;
+    public GameObject PauseMenu;
 
     [Header("Inventory")]
     public List<GameObjects> Inventory;
@@ -108,7 +109,7 @@ public class PlayerController : MonoBehaviour
         else
             getUIInputs();
 
-        if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0 && Input.GetAxisRaw("Jump") == 0)
+        if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0 && Input.GetAxisRaw("Jump") == 0 && Input.GetAxisRaw("esc") == 0)
             hasReleasedKey = true;
 
         if (Inventory.Count != InventoryLengthMemory)
@@ -184,6 +185,13 @@ public class PlayerController : MonoBehaviour
             hasReleasedKey = false;
             InventoryUI.SetActive(true);
             openInventory();
+            world.inUI = true;
+        }
+
+        if (Input.GetAxisRaw("esc") > 0 && hasReleasedKey)
+        {
+            hasReleasedKey = false;
+            PauseMenu.SetActive(true);
             world.inUI = true;
         }
 
