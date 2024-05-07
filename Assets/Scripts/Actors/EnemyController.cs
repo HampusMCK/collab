@@ -9,7 +9,8 @@ public class EnemyController : MonoBehaviour
     HealthSystem health;
     SmellSystem smell;
 
-    WorldSC world;
+    [HideInInspector]
+    public WorldSC world;
 
     [Header("Sensing")]
     public float sightRange;
@@ -40,7 +41,7 @@ public class EnemyController : MonoBehaviour
                 agent.SetDestination(g.transform.position);
             }
         }
-        
+
 
 
         GameObject[] inHear = GetObjectsInHearing();
@@ -48,7 +49,10 @@ public class EnemyController : MonoBehaviour
         {
             if (g.tag == "Player")
             {
-                // if make sound
+                float s = g.GetComponent<PlayerController>().Sound;
+                float d = Vector3.Distance(transform.position, g.transform.position);
+
+                // if ()
             }
         }
 
@@ -80,6 +84,12 @@ public class EnemyController : MonoBehaviour
                 Vector3 pos = transform.position + Vector3.up;
                 dirToColid = c.transform.position - pos;
                 Physics.SphereCast(pos, 0.5f, dirToColid, out RaycastHit hit, sightRange, mask);
+                if (hit.collider == null)
+                {
+                    GameObject[] e = { };
+                    return e;
+                }
+
                 Debug.DrawLine(pos, hit.point, Color.green);
 
                 if ((mask & (1 << hit.collider.gameObject.layer)) != 0)
@@ -90,7 +100,7 @@ public class EnemyController : MonoBehaviour
                 }
             }
         }
-        
+
         // Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit1, sightRange, Physics.DefaultRaycastLayers);
         // Debug.DrawRay(transform.position + Vector3.up, transform.forward * sightRange, Color.green);
 
@@ -121,8 +131,6 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 reverseWind = -windDir;
         string[] layers = { LayerMask.LayerToName(6) };
-        // string[] layers = {LayerMask.LayerToName(6)};
-        // string[] layers = { LayerMask.LayerToName(6) };
         LayerMask mask = LayerMask.GetMask(layers);
         Collider[] smellyColids = Physics.OverlapSphere(transform.position, smellRange, mask, QueryTriggerInteraction.UseGlobal);
         List<GameObject> smellyObjs = new();

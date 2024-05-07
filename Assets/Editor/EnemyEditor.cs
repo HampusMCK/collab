@@ -4,16 +4,10 @@ using UnityEngine;
 [CustomEditor(typeof(EnemyController))]
 public class EnemyEditor : Editor
 {
-    WorldSC world;
-
-    void Awake()
-    {
-        world = GameObject.Find("World").GetComponent<WorldSC>();
-    }
-
     void OnSceneGUI()
     {
         EnemyController ec = (EnemyController)target;
+
 
         //Draw sight
         Handles.color = Color.red;
@@ -29,9 +23,11 @@ public class EnemyEditor : Editor
         Handles.DrawWireArc(ec.transform.position, Vector3.up, ec.transform.forward, 360, ec.hearingRange);
 
         //Draw smell
+        if (ec.world == null)
+        return;
         Handles.color = Color.yellow;
-        Vector3 reverseWind = -world.wind;
-        float b1 = Vector3.Angle(world.transform.forward, reverseWind);
+        Vector3 reverseWind = -ec.world.wind;
+        float b1 = Vector3.Angle(ec.world.transform.forward, reverseWind);
         if (reverseWind.x < 0) b1 = -b1 + 360;
         float c1 = 45;
         Vector3 smellAngleA = MathX.DirFromAngle(-c1 / 2, b1);

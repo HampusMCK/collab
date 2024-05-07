@@ -14,6 +14,18 @@ public class PlayerController : MonoBehaviour
     public float mouseSensetivity;
     public float jumpForce;
 
+    [Header("Enemy Sensing")]
+    float sound;
+    public float Sound
+    {
+        get => sound;
+        set
+        {
+            sound = value;
+            if (sound > 20) sound = 20;    
+        }
+    }
+
     [Header("UI Elements")]
     public GameObject CraftingUI;
     public GameObject InventoryUI;
@@ -32,6 +44,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool inInventory = false;
     bool hasReleasedKey = true;
     bool crafting = false;
+    bool jumping = false;
 
     Transform cam;
 
@@ -51,6 +64,7 @@ public class PlayerController : MonoBehaviour
     BreakableItem breakableItem;
 
     WorldSC world;
+    private float sound1;
 
     void Start()
     {
@@ -63,6 +77,33 @@ public class PlayerController : MonoBehaviour
     }
 
     private void FixedUpdate()
+    {
+        if (jumping)
+        {
+            Jump();
+            jumping = false;
+        }
+    }
+
+    void Update()
+    {
+        raycasting();
+        if (!world.inUI)
+            getPlayerInput();
+        else
+            getUIInputs();
+
+        if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0 && Input.GetAxisRaw("Jump") == 0 && Input.GetAxisRaw("esc") == 0)
+            hasReleasedKey = true;
+
+        if (Inventory.Count != InventoryLengthMemory)
+            UpdateInventory();
+        InventoryLengthMemory = Inventory.Count;
+
+        DampenSound();
+    }
+
+    void raycasting()
     {
         other = null;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -100,21 +141,6 @@ public class PlayerController : MonoBehaviour
             itemLookingAt = null;
             breakableItem = null;
         }
-    }
-
-    void Update()
-    {
-        if (!world.inUI)
-            getPlayerInput();
-        else
-            getUIInputs();
-
-        if (Input.GetAxisRaw("Action") == 0 && Input.GetAxisRaw("Inventory") == 0 && Input.GetAxisRaw("Jump") == 0 && Input.GetAxisRaw("esc") == 0)
-            hasReleasedKey = true;
-
-        if (Inventory.Count != InventoryLengthMemory)
-            UpdateInventory();
-        InventoryLengthMemory = Inventory.Count;
     }
 
     private void getUIInputs()
@@ -242,13 +268,14 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetAxisRaw("Jump") > 0 && hasReleasedKey && canJump)
         {
-            Jump();
+            jumping = true;
         }
     }
 
     void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+        MakeSound(99);
     }
 
     bool canJump
@@ -370,7 +397,16 @@ public class PlayerController : MonoBehaviour
 
     public void MakeSound(int magnitude)
     {
-        //quack
+        Sound = magnitude;
+    }
+
+    void DampenSound()
+    {
+        if (Sound > 0)
+        {
+            Sound -= 2 * Time.deltaTime;
+            print(Sound);
+        }
     }
 
     public void pickupItem(byte ID)

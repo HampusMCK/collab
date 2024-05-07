@@ -144,7 +144,7 @@ MonoBehaviour:
   speed: 6
   sprintSpeed: 10
   mouseSensetivity: 3
-  jumpForce: 5
+  jumpForce: 5.5
   CraftingUI: {fileID: 0}
   InventoryUI: {fileID: 0}
   ChestUI: {fileID: 0}
@@ -183,6 +183,7 @@ MonoBehaviour:
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   hotbar: {fileID: 0}
+  PauseMenu: {fileID: 0}
   Inventory:
   - ID: 0
     Name: Metal Scrap
