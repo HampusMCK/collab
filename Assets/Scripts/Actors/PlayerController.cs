@@ -27,16 +27,16 @@ public class PlayerController : MonoBehaviour
     }
 
     [Header("UI Elements")]
+    public GameObject PauseMenu;
     public GameObject CraftingUI;
     public GameObject InventoryUI;
+    public Inventory inv;
     public GameObject ChestUI;
     public Inventory ChestInventory;
-    public Inventory inv;
     public Slider healthBar;
     public Image healthbarFill;
     public Gradient healthGradient;
     public hotbar hotbar;
-    public GameObject PauseMenu;
 
     [Header("Inventory")]
     public List<GameObjects> Inventory;
@@ -64,7 +64,6 @@ public class PlayerController : MonoBehaviour
     BreakableItem breakableItem;
 
     WorldSC world;
-    private float sound1;
 
     void Start()
     {
@@ -99,8 +98,6 @@ public class PlayerController : MonoBehaviour
         if (Inventory.Count != InventoryLengthMemory)
             UpdateInventory();
         InventoryLengthMemory = Inventory.Count;
-
-        DampenSound();
     }
 
     void raycasting()
@@ -275,7 +272,7 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-        MakeSound(99);
+        MakeSound(7);
     }
 
     bool canJump
@@ -397,16 +394,7 @@ public class PlayerController : MonoBehaviour
 
     public void MakeSound(int magnitude)
     {
-        Sound = magnitude;
-    }
-
-    void DampenSound()
-    {
-        if (Sound > 0)
-        {
-            Sound -= 2 * Time.deltaTime;
-            print(Sound);
-        }
+        Noise.MakeNoise(transform.position, magnitude);
     }
 
     public void pickupItem(byte ID)

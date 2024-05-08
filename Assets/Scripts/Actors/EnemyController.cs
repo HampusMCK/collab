@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,17 +19,19 @@ public class EnemyController : MonoBehaviour
     public float hearingRange;
     public float smellRange;
 
-    void Awake()
-    {
-
-    }
-
-    private void Start()
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         health = GetComponent<HealthSystem>();
         smell = GetComponent<SmellSystem>();
         world = GameObject.Find("World").GetComponent<WorldSC>();
+
+        Noise.SoundEvent += OnHearNoise;
+    }
+
+    void OnDestroy()
+    {
+        Noise.SoundEvent -= OnHearNoise;
     }
 
     void Update()
@@ -38,21 +41,16 @@ public class EnemyController : MonoBehaviour
         {
             if (g.tag == "Player")
             {
-                agent.SetDestination(g.transform.position);
+                // agent.SetDestination(g.transform.position);
             }
         }
-
-
 
         GameObject[] inHear = GetObjectsInHearing();
         foreach (GameObject g in inHear)
         {
             if (g.tag == "Player")
             {
-                float s = g.GetComponent<PlayerController>().Sound;
-                float d = Vector3.Distance(transform.position, g.transform.position);
 
-                // if ()
             }
         }
 
@@ -101,12 +99,6 @@ public class EnemyController : MonoBehaviour
             }
         }
 
-        // Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit1, sightRange, Physics.DefaultRaycastLayers);
-        // Debug.DrawRay(transform.position + Vector3.up, transform.forward * sightRange, Color.green);
-
-        // Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit1, sightRange, Physics.DefaultRaycastLayers);
-        // Debug.DrawRay(transform.position + Vector3.up, transform.forward * sightRange, Color.green);
-
         return objsInSight.ToArray();
     }
 
@@ -147,5 +139,31 @@ public class EnemyController : MonoBehaviour
         }
 
         return smellyObjs.ToArray();
+    }
+
+    void OnHearNoise(Vector3 Position, int Intensity)
+    {
+        float distance = Vector3.Distance(transform.position, Position) * 0.1f;
+
+        float intense = 20 - Intensity;
+        float distIntens = (distance / Intensity);
+
+        float radius = intense * (distance / 2);
+
+        if (distance < hearingRange + Intensity)
+        {
+            Vector3 randomDir = Random.insideUnitSphere;
+
+            Vector3 destination = Position + (randomDir * radius);
+
+            agent.SetDestination(destination);
+        }
+
+        print(distance);
+        print(Intensity);
+        print(radius);
+
+
+
     }
 }
