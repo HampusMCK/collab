@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     RaycastHit hit;
     Collider other = null;
 
+    //Ray registers
     Chest chest;
     Item itemLookingAt;
     BreakableItem breakableItem;
